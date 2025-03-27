@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div style="max-width: 500px; margin: auto;">
+        <h1 style="text-align: center;">Форма</h1>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="theme">Тема</label>
+                <input type="text" name="theme" id="theme" style="width: 100%; padding: 5px;" value="{{ request.form.get('theme') or '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="text">Текст</label>
+                <textarea name="text" id="text" style="width: 100%; padding: 5px;" rows="4">{{ request.form.get('text') or '' }}</textarea>
+            </div>
+            <div class="mb-3" style="text-align: center;">
+                <button type="submit" style="padding: 10px 20px;">Отправить</button>
+            </div>
+        </form>
+
+    {% if request.form %}
+        <div style="max-width: 500px; margin: auto; margin-top: 20px;">
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+                <tbody>
+                    {% for k, v in request.form.items() %}
+                        <tr>
+                            <td style="border: 1px solid #ccc; padding: 5px;">{{ k }}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px;">{{ v }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
