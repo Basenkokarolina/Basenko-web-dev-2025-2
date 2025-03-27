@@ -1,2 +1,10 @@
 __pycache__
-lab1/ve
+ve
+lab1/__pycache__
+lab2/__pycache__
+lab1/.pytest_cache
+lab2/.pytest_cache
+lab1/tests/__pycache__
+lab2/tests/__pycache__
+lab1/tests/.pytest_cache
+lab2/tests/.pytest_cache
