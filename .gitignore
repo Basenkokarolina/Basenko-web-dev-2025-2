@@ -1,5 +1,8 @@
 __pycache__
 ve
+.env
+run_server.sh
+.DS_Store
 lab1/__pycache__
 lab2/__pycache__
 lab1/.pytest_cache
