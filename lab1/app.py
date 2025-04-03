@@ -52,7 +52,7 @@ def post(index):
         p = posts_list()[index]
         return render_template('post.html', title=p['title'], post=p)
     except IndexError:
-        abort(404) 
+        abort(404) #генерирует исключение
 
 @app.route('/about')
 def about():

@@ -3,7 +3,7 @@ from app import app, posts_list
 import re
 
 
-@pytest.fixture
+@pytest.fixture 
 def client():
     app.config["TESTING"] = True
     with app.test_client() as client:
