@@ -8,7 +8,7 @@ class RoleRepository:
             role = cursor.fetchone()
         return role
 
-    def get_all(self):
+    def all(self):
         with self.db_connector.connect().cursor(named_tuple=True) as cursor:
             cursor.execute("SELECT * FROM roles;")
             roles = cursor.fetchall()
