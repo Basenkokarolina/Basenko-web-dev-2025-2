@@ -1,5 +1,4 @@
-import random
-from functools import lru_cache
+from functools import lru_cache, wraps
 from flask import Flask, render_template, session, redirect, url_for, request, make_response, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 
@@ -40,14 +39,6 @@ def load_user(user_id): #загружает пользователя по user_i
 def index():
     return render_template('index.html')
 
-@app.route('/counter')
-def counter():
-    if session.get('counter'):
-        session['counter'] += 1
-    else:
-        session['counter'] = 1     
-    return render_template('counter.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     next_page = request.args.get('next')
@@ -70,9 +61,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/secret')
-@login_required
-def secret():
-    return render_template('secret.html')
+
 
  
