@@ -16,11 +16,11 @@ CREATE TABLE users(
     password_hash VARCHAR(256) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     role_id INTEGER,
-    FOREIGN KEY (role_id) REFERENCES (roles(id))
+    FOREIGN KEY (role_id) REFERENCES roles(id)
 )   ENGINE INNODB;
 
 INSERT INTO roles (id, name)
 VALUES (1, 'admin');
 
-INSERT INTO users (username, first_name, last_name, password_hash, role)
-VALUES ('admin', 'Басенко', 'Каролина', SHA2('qwerty', 256), 1);
+INSERT INTO users (username, first_name, last_name, password_hash, role_id)
+VALUES ('admin', 'Каролина', 'Басенко', SHA2('qwerty', 256), 1);

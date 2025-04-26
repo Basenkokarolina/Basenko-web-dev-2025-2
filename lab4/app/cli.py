@@ -1,6 +1,6 @@
 import click
 from flask import current_app
-from app import db
+from lab4.app import db
 
 @click.command('init-db')
 def init_db_command():

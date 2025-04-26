@@ -24,8 +24,8 @@ class UserRepository:
        connection = self.db_connector.connect()
        with connection.cursor(named_tuple=True) as cursor:
            query = (
-               "INSERT INTO users (username, password_hash, first_name, middle_name, last_name, role_id VALUES "
-               "(%s, SHA2(%s, 256), %s, %s, %s, $s)"
+               "INSERT INTO users (username, password_hash, first_name, middle_name, last_name, role_id) VALUES "
+               "(%s, SHA2(%s, 256), %s, %s, %s, %s)"
            )
            user_data = (username, password, first_name, middle_name, last_name, role_id)
            cursor.execute(query, user_data)
@@ -34,7 +34,7 @@ class UserRepository:
     def update(self, user_id, first_name, middle_name, last_name, role_id):
         connection = self.db_connector.connect()
         with connection.cursor(named_tuple=True) as cursor:
-            query = ("UPDATE users SET first name = %s, "
+            query = ("UPDATE users SET first_name = %s, "
                     "middle_name = %s, last_name = %s, "
                     "role_id = %s WHERE id = %s")
             user_data = (first_name, middle_name, last_name, role_id, user_id)
@@ -47,4 +47,22 @@ class UserRepository:
             cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
             connection.commit()
 
-            
+    def check_password(self, user_id, input_password):
+        with self.db_connector.connect().cursor(named_tuple=True) as cursor:
+            query = (
+                "SELECT * FROM users WHERE id = %s AND password_hash = SHA2(%s, 256);"
+            )
+            user_data = (user_id, input_password)
+            cursor.execute(query, user_data)
+            user = cursor.fetchone()
+        return user is not None
+
+    def verify_password(self, user_id, new_password):
+        connection = self.db_connector.connect()
+        with connection.cursor(named_tuple=True) as cursor:
+            query = (
+                "UPDATE users SET password_hash = SHA2(%s, 256) WHERE id = %s;"
+            )
+            user_data = (new_password, user_id)
+            cursor.execute(query, user_data)
+            connection.commit()
