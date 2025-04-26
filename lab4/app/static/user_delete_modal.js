@@ -9,7 +9,7 @@ function modalShown(event) {
         `Вы уверены, что хотите удалить пользователя ${userName}?`;
 
     let form = document.getElementById('deleteModalForm');
-    form.action = `/users/${userId}/delete`;
+    form.action = `/lab4/users/${userId}/delete`;
 }
 
 document.addEventListener('DOMContentLoaded', function() {

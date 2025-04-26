@@ -137,7 +137,7 @@ def edit(user_id):
         user_data["user_id"] = user_id
         if not any(errors.values()):
             try:
-                user_repository.create(**user_data)
+                user_repository.update(**user_data)
                 flash('Учетная запись успешно изменена', 'success')
                 return redirect(url_for('users.index'))
             except connector.errors.DatabaseError as e:
