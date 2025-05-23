@@ -19,8 +19,8 @@ CREATE TABLE users(
     FOREIGN KEY (role_id) REFERENCES roles(id)
 )   ENGINE INNODB;
 
-INSERT INTO roles (id, name)
-VALUES (1, 'admin');
+-- INSERT INTO roles (id, name)
+-- VALUES (1, 'admin');
 
-INSERT INTO users (username, first_name, last_name, password_hash, role_id)
-VALUES ('admin', 'Каролина', 'Басенко', SHA2('qwerty', 256), 1);
+-- INSERT INTO users (username, first_name, last_name, password_hash, role_id)
+-- VALUES ('admin', 'Каролина', 'Басенко', SHA2('qwerty', 256), 1);

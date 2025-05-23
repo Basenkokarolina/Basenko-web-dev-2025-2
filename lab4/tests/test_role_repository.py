@@ -90,3 +90,4 @@ def test_verify_password(user_repository, existing_user):
     user_repository.verify_password(existing_user.id, new_password)
     assert user_repository.check_password(existing_user.id, new_password) is True
     assert user_repository.check_password(existing_user.id, 'password123') is False
+

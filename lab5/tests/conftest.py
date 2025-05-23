@@ -172,4 +172,3 @@ def example_users(db_connector, existing_role):
         query = f"DELETE FROM users WHERE id IN ({user_ids});"
         cursor.execute(query)
         connection.commit()
-

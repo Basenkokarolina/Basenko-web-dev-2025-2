@@ -2,6 +2,7 @@ from functools import lru_cache, wraps
 from flask import Blueprint, render_template, session, redirect, url_for, request, make_response, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from .repositories import UserRepository
+from .decorators import before_request
 from app import db
 
 user_repository = UserRepository(db)
@@ -28,6 +29,7 @@ def load_user(user_id):  # загружает пользователя по user
 
 
 @bp.route('/login', methods=['GET', 'POST'])
+@before_request()
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -46,6 +48,7 @@ def login():
 
 
 @bp.route('/logout')
+@before_request()
 def logout():
     logout_user()
     return redirect(url_for('users.index'))

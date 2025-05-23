@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="mb-3">Отчёт по посещениям страниц</h2>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Страница</th>
+                <th>Количество посещений</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in stats %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ stat.path }}</td>
+                    <td>{{ stat.visit_count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <a href="{{ url_for('logs.export_pages_csv') }}" class="btn btn-success">
+            Экспорт в CSV
+        </a>
+    </div>
+{% endblock %}
