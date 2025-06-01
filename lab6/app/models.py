@@ -11,7 +11,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey, Text, Integer, MetaData
 
 
-
 class Base(DeclarativeBase):
   metadata = MetaData(naming_convention={
         "ix": 'ix_%(column_0_label)s',
