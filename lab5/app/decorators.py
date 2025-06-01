@@ -12,31 +12,24 @@ def check_rights(action):
     def decorator(view_func):
         @wraps(view_func)
         def wrapped_view(*args, **kwargs):
-            # Проверка аутентификации
             if not current_user.is_authenticated:
                 flash('Необходима авторизация', 'danger')
                 return redirect(url_for('auth.login'))
-
-            # Получение пользователя и его роли
-            user = user_repo.get_by_id(current_user.get_id())
+            user = user_repo.get_by_id(current_user.get_id()) # Получение пользователя и его роли
             if not user or not user.role:
                 flash('Ошибка доступа к данным пользователя.', 'danger')
                 return redirect(url_for('users.index'))
-
-            # Определение доступных действий для ролей
-            role_permissions = {
+            role_permissions = { # Определение доступных действий для ролей
                 'admin': ['create', 'edit', 'delete', 'view', 'by_pages', 'by_users'],
                 'user': ['self_edit', 'self_view']
             }
 
-            # Проверка прав
             is_allowed = False
             if user.role in role_permissions:
                 allowed_actions = role_permissions[user.role]
                 target_user_id = kwargs.get('user_id')
                 current_user_id = int(current_user.get_id())
 
-                # Основная проверка доступа
                 if action in allowed_actions:
                     is_allowed = True
                 elif action == 'edit' and target_user_id == current_user_id and 'self_edit' in allowed_actions:
@@ -47,7 +40,6 @@ def check_rights(action):
             if is_allowed:
                 return view_func(*args, **kwargs)
 
-            # Если доступ запрещен
             flash('У вас недостаточно прав для доступа к данной странице.', 'danger')
             return redirect(url_for('users.index'))
 

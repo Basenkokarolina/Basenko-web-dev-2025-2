@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import render_pagination %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Отзывы о курсе: {{ course.name }}</h2>
+
+    <form method="get" class="form-inline mb-4">
+        <label for="sort_by" class="mr-2 mb-2">Сортировать:</label>
+        <select name="sort_by" id="sort_by" class="form-control mr-2 mb-2">
+            <option value="new" {% if sort_by == 'new' %}selected{% endif %}>Сначала новые</option>
+            <option value="positive" {% if sort_by == 'positive' %}selected{% endif %}>Сначала положительные</option>
+            <option value="negative" {% if sort_by == 'negative' %}selected{% endif %}>Сначала отрицательные</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Применить</button>
+    </form>
+
+    {% for review in reviews.items %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <strong>{{ review.user.full_name }}</strong>
+                <span class="text-muted">{{ review.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Оценка:</strong> {{ rating_labels[review.rating] }}</p>
+                <p>{{ review.text }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+    {{ render_pagination(reviews, 'courses.course_reviews', {'course_id': course.id, 'sort_by': sort_by}) }}
+</div>
+<div class="container mt-5 mb-5">
+    {% if existing_review %}
+        <div class="card mt-4">
+            <div class="card-header"><strong>Ваш отзыв</strong></div>
+            <div class="card-body">
+                <p><strong>Оценка:</strong> {{ rating_labels[existing_review.rating | int] }}</p>
+                <p>{{ existing_review.text }}</p>
+            </div>
+        </div>
+</div>
+{% else %}
+    {% include 'courses/review_form.html' %}
+{% endif %}
+
+{% endblock %}

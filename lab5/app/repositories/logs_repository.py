@@ -77,8 +77,6 @@ class LogsRepository:
         for i, stat in enumerate(stats, 1):
             writer.writerow([i, stat.path, stat.visit_count])
 
-        output.seek(0)
-        return output
 
     def export_user_stats_to_csv(self, user_repository):
         stats = self.get_user_stats()
@@ -96,6 +94,3 @@ class LogsRepository:
                 user_name = "Неаутентифицированный пользователь"
 
             writer.writerow([i, user_name, stat.visit_count])
-
-        output.seek(0)
-        return output

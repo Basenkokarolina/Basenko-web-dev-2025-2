@@ -11,7 +11,6 @@ def clear_logs_table(db_connector):
         cursor.execute("ALTER TABLE visit_logs AUTO_INCREMENT = 1;")
     connection.commit()
 
-
 def test_log_creation_and_storage(db_connector):
     repo = LogsRepository(db_connector)
     repo.create("/test-page", user_id=None)

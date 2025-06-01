@@ -4,6 +4,7 @@ from lab2.app import app as lab2_app
 from lab3.app import app as lab3_app
 from lab4.app import create_app as lab4_create_app
 from lab5.app import create_app as lab5_create_app
+from lab6.app import create_app as lab6_create_app
 from root_app.app import app as root_app
 
 app = DispatcherMiddleware(root_app, {
@@ -11,6 +12,7 @@ app = DispatcherMiddleware(root_app, {
     '/lab2': lab2_app,
     '/lab3': lab3_app,
     '/lab4': lab4_create_app(),
-    '/lab5': lab5_create_app()
+    '/lab5': lab5_create_app(),
+    '/lab6': lab6_create_app()
 })
 application = app
