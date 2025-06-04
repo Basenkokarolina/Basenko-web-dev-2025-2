@@ -81,6 +81,25 @@ def create():
 
     return redirect(url_for('courses.index'))
 
+def submit_review(course, existing_review, rating, text):
+    rating = int(rating)
+    if existing_review:
+        course.rating_sum += rating - existing_review.rating
+        existing_review.rating = rating
+        existing_review.text = text
+        existing_review.created_at = datetime.now()
+    else:
+        new_review = Review(
+            rating=rating,
+            text=text,
+            course_id=course.id,
+            user_id=current_user.id,
+            created_at=datetime.now()
+        )
+        db.session.add(new_review)
+        course.rating_sum += rating
+        course.rating_num += 1
+
 
 @bp.route('/<int:course_id>', methods=['GET', 'POST'])
 def show(course_id):
@@ -93,28 +112,9 @@ def show(course_id):
         existing_review = db.session.query(Review).filter_by(course_id=course_id, user_id=current_user.id).first()
 
     if request.method == 'POST' and current_user.is_authenticated:
-        rating = int(request.form['rating'])
+        rating = request.form['rating']
         text = request.form['text']
-
-        if existing_review:
-            existing_review.rating = int(rating)
-            existing_review.text = text
-            existing_review.created_at = datetime.now()
-        else:
-            new_review = Review(
-                rating=rating,
-                text=text,
-                course_id=course_id,
-                user_id=current_user.id,
-                created_at=datetime.now()
-            )
-            db.session.add(new_review)
-
-        # Обновим рейтинг курса
-        all_reviews = db.session.query(Review).filter_by(course_id=course_id).all()
-        course.rating_sum = sum(r.rating for r in all_reviews)
-        course.rating_num = len(all_reviews)
-
+        submit_review(course, existing_review, rating, text)
         db.session.commit()
         return redirect(url_for('courses.show', course_id=course_id))
 
@@ -145,33 +145,13 @@ def course_reviews(course_id):
     existing_review = db.session.query(Review).filter_by(course_id=course_id, user_id=current_user.id).first()
 
     if request.method == 'POST':
-        rating = int(request.form['rating'])
+        rating = request.form['rating']
         text = request.form['text']
-
-        if existing_review:
-            existing_review.rating = rating
-            existing_review.text = text
-            existing_review.created_at = datetime.now()
-        else:
-            new_review = Review(
-                rating=rating,
-                text=text,
-                course_id=course_id,
-                user_id=current_user.id,
-                created_at=datetime.now()
-            )
-            db.session.add(new_review)
-
-        all_reviews = db.session.query(Review).filter_by(course_id=course_id).all()
-        course.rating_sum = sum(r.rating for r in all_reviews)
-        course.rating_num = len(all_reviews)
-
+        submit_review(course, existing_review, rating, text)
         db.session.commit()
-
         return redirect(url_for('courses.course_reviews', course_id=course_id))
 
     sort_by = request.args.get('sort_by', 'new')
-
     if sort_by == 'positive':
         order = Review.rating.desc()
     elif sort_by == 'negative':
@@ -192,8 +172,6 @@ def course_reviews(course_id):
         course=course,
         reviews=reviews,
         existing_review=existing_review,
-        sort_by=sort_by,  
+        sort_by=sort_by,
         rating_labels=RATING_LABELS
     )
-
-
