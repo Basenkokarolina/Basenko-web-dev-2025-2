@@ -51,7 +51,7 @@ def handler():
     pass
 
 @bp.route('/')
-@before_request()
+@before_request
 def index():
     if current_user.is_authenticated:
         current_user_id = current_user.get_id()
@@ -66,7 +66,7 @@ def index():
     return render_template('users/index.html', users=user_repository.all(), user_role=user_role)
 
 @bp.route('/<int:user_id>')
-@before_request()
+@before_request
 @check_rights('view')
 def show(user_id):
     user = user_repository.get_by_id(user_id)
@@ -78,7 +78,7 @@ def show(user_id):
 
 
 @bp.route('/new', methods=['POST', 'GET'])
-@before_request()
+@before_request
 @login_required
 @check_rights('create')
 def new():
@@ -123,7 +123,7 @@ def new():
 
 
 @bp.route('/<int:user_id>/delete', methods=['POST', 'GET'])
-@before_request()
+@before_request
 @login_required
 @check_rights('delete')
 def delete(user_id):
@@ -147,7 +147,7 @@ def delete(user_id):
     return redirect(url_for('users.index'))
 
 @bp.route('/<int:user_id>/edit', methods = ['POST', 'GET'])
-@before_request()
+@before_request
 @login_required
 @check_rights('edit')
 def edit(user_id):
@@ -196,7 +196,7 @@ def edit(user_id):
 
 
 @bp.route('/change-password', methods=['GET', 'POST'])
-@before_request()
+@before_request
 @login_required
 def change_password():
     errors = {}

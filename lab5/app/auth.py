@@ -29,7 +29,7 @@ def load_user(user_id):  # загружает пользователя по user
 
 
 @bp.route('/login', methods=['GET', 'POST'])
-@before_request()
+@before_request
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -48,7 +48,7 @@ def login():
 
 
 @bp.route('/logout')
-@before_request()
+@before_request
 def logout():
     logout_user()
     return redirect(url_for('users.index'))

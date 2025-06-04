@@ -66,31 +66,4 @@ class LogsRepository:
             cursor.execute(query)
             return cursor.fetchall()
 
-    def export_page_stats_to_csv(self):
-        stats = self.get_page_stats()
 
-        output = io.StringIO()
-        writer = csv.writer(output, delimiter=';')
-
-        writer.writerow(['№', 'Страница', 'Количество посещений'])
-
-        for i, stat in enumerate(stats, 1):
-            writer.writerow([i, stat.path, stat.visit_count])
-
-
-    def export_user_stats_to_csv(self, user_repository):
-        stats = self.get_user_stats()
-
-        output = io.StringIO()
-        writer = csv.writer(output, delimiter=';')
-
-        writer.writerow(['№', 'Пользователь', 'Количество посещений'])
-
-        for i, stat in enumerate(stats, 1):
-            if stat.user_id:
-                user = user_repository.get_by_id(stat.user_id)
-                user_name = f"{user.last_name} {user.first_name} {user.middle_name or ''}"
-            else:
-                user_name = "Неаутентифицированный пользователь"
-
-            writer.writerow([i, user_name, stat.visit_count])

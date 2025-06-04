@@ -10,7 +10,7 @@ from app.repositories import UserRepository
 
 TEST_DB_CONFIG = {
     'MYSQL_USER': 'root',
-    'MYSQL_PASSWORD': 'mars2006',
+    'MYSQL_PASSWORD': 'CaT2012!',
     'MYSQL_HOST': 'localhost',
     'MYSQL_DATABASE': 'lab4_test',
 }
@@ -93,25 +93,20 @@ def nonexisting_role_id():
 
 @pytest.fixture
 def example_roles(db_connector):
-    data = [(1, 'admin'), (2, 'test')]
-    row_class = namedtuple('Row', ['id', 'name'])
-    roles = [row_class(*row_data) for row_data in data]
-
     connection = db_connector.connect()
-
     with connection.cursor() as cursor:
-        placeholders = ', '.join(['(%s, %s)' for _ in range(len(data))])
-        query = f"INSERT INTO roles(id, name) VALUES {placeholders};"
-        cursor.execute(query, reduce(lambda seq, x: seq + list(x), data, []))
-        connection.commit()
+        # Проверяем, существуют ли роли перед вставкой
+        cursor.execute("SELECT COUNT(*) FROM roles;")
+        if cursor.fetchone()[0] == 0:
+            cursor.execute(
+                "INSERT INTO roles(id, name) VALUES (1, 'admin'), (2, 'user');"
+            )
+            connection.commit()
+    
+    with connection.cursor(dictionary=True) as cursor:
+        cursor.execute("SELECT * FROM roles;")
+        return cursor.fetchall()
 
-    yield roles
-
-    with connection.cursor() as cursor:
-        role_ids = ', '.join([str(role.id) for role in roles])
-        query = f"DELETE FROM roles WHERE id IN ({role_ids});"
-        cursor.execute(query)
-        connection.commit()
 
 
 @pytest.fixture
